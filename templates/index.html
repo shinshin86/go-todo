@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Go ToDo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="columns is-mobile">
+            <div class="column is-three-fifths is-offset-one-fifth">
+                <h1 class="title" href="/"><a href="/">Go ToDo</a></h1>
+                <form method="post" action="/new">
+                    <div class="field">
+                        <label for="text" class="label">Todo</label>
+                        <div class="control">
+                            <input type="text" name="text" class="input" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="status" class="label">Status</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="status">
+                                    <option value="ToDo">To Do</option>
+                                    <option value="InProgress">In Progress</option>
+                                    <option value="Done了">Done</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="tag" class="label">Tag</label>
+                        <div class="control">
+                            <input type="text" name="tag" class="input" />
+                        </div>
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Add</button>
+                    </div>
+                </form>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ToDo</th>
+                            <th>Status</th>
+                            <th>Tag</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {{ range .todos }}
+                    <tr>
+                        <th>
+                            <div
+                                style="background-color: {{ .Tag.Color }}; width: 40px; height: 40px; padding: 8px;border-radius: 50%;">
+                            </div>
+                        </th>
+                        <td>{{ .Text }}</td>
+                        <td>{{ .Status }}</td>
+                        <td><a href="/tag/{{ .Tag.Name }}">{{ .Tag.Name }}</a></td>
+                        <td><a href="/detail/{{.ID}}" class="button is-primary">Edit</a></td>
+                        <td><button class="button is-danger modal-button" data-target={{ .ID }}>Delete</a></td>
+
+                    </tr>
+                    {{ end }}
+                </table>
+            </div>
+        </div>
+        <div id="modal-delete" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Delete Todo</p>
+                    <button class="delete close" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    Are you sure you want to delete it?<br />
+                    This operation cannot be reversed.
+                </section>
+                <footer class="modal-card-foot">
+                    <form method="post" action="/delete">
+                        <input type="hidden" id="delete-id" name="delete-id" value="" />
+                        <button type="submit" class="button is-danger">Delete</button>
+                        <button class="button close">Cancel</button>
+                    </form>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(".modal-button").click(function (e) {
+            $('#modal-delete').addClass("is-active");
+            $('#delete-id').val($(e.target).attr('data-target'));
+        })
+
+        $(".close").click(function (e) {
+            e.preventDefault();
+            $('#modal-delete').removeClass("is-active");
+        })
+    </script>
+</body>
