@@ -9,6 +9,10 @@ I created this to study Go.
 
 
 
+![demo gif](./demo-gif/demo.gif)
+
+
+
 ## Usage
 
 You can use this command.
